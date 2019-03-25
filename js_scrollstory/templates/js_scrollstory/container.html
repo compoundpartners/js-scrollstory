@@ -1,0 +1,25 @@
+{% load staticfiles cms_tags sekizai_tags %}
+<section>
+  <ul>
+    {% for plugin in instance.child_plugin_instances %}
+      {% if plugin.title %}
+        <li><a href="#{{ plugin.get_id }}">{{ plugin.title }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  <div {{ attributes_str }}>
+    {% for plugin in instance.child_plugin_instances %}
+        {% render_plugin plugin %}
+    {% endfor %}
+  </div>
+</section>
+
+
+
+{% addtoblock "js" %}<script type="text/javascript" src="{% static 'jquery.scrollstory.js' %}"></script>{% endaddtoblock %}
+{% addtoblock "js" %}<script>
+    $(function(){
+      $("#{{ instance.get_id }}").scrollStory();
+    });
+</script>{% endaddtoblock %}
