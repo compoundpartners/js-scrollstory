@@ -1,16 +1,16 @@
 from aldryn_client import forms
 
 class Form(forms.BaseForm):
-    image_section_layouts = forms.CheckboxField(
-        'Image Section layouts', required=False, initial=False
+    section_layouts = forms.CharField(
+        'Section layouts', required=False, initial=False
     )
-    column_layouts = forms.CheckboxField(
-        'Column layouts', required=False, initial=False
+    slideshow_layouts = forms.CharField(
+        'Slideshow layouts', required=False, initial=False
     )
 
     def to_settings(self, data, settings):
-        if data['image_section_layouts']:
-            settings['SCROLLSTORY_IMAGE_SECTION_LAYOUTS'] = tuple(l.strip() for l in data['image_section_layouts'].split(','))
-        if data['column_layouts']:
-            settings['SCROLLSTORY_COLUMN_LAYOUTS'] = tuple(l.strip() for l in data['column_layouts'].split(','))
+        if data['section_layouts']:
+            settings['SHOWCASE_SECTION_LAYOUTS'] = tuple(l.strip() for l in data['section_layouts'].split(','))
+        if data['slideshow_layouts']:
+            settings['SHOWCASE_SLIDESHOW_LAYOUTS'] = tuple(l.strip() for l in data['slideshow_layouts'].split(','))
         return settings

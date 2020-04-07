@@ -1,6 +1,6 @@
 {
-    "package-name": "js-scrollstory",
+    "package-name": "js-showcase",
     "installed-apps": [
-        "js_scrollstory"
+        "js_showcase"
     ]
 }

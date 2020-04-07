@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
-from js_scrollstory import __version__
+from js_showcase import __version__
 
 
 setup(
-    name='js-scrollstory',
+    name='js-showcase',
     version=__version__,
     description=open('README.rst').read(),
     author='Compound Partners Ltd',

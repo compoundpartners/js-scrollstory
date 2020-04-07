@@ -1,0 +1,65 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext as _
+from django.utils.text import slugify
+from cms.models.pluginmodel import CMSPlugin
+from js_color_picker.fields import RGBColorField
+from filer.fields.image import FilerImageField
+from djangocms_text_ckeditor.fields import HTMLField
+
+
+@python_2_unicode_compatible
+class ShowcaseContainer(CMSPlugin):
+    title = models.CharField(_('title'), max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.title or str(self.pk)
+
+    def get_id(self):
+        return slugify(self.title or 'show case %s' % self.pk)
+
+
+@python_2_unicode_compatible
+class ShowcaseSection(CMSPlugin):
+    title = models.CharField(_('Anchor title'), max_length=255, blank=True, null=True)
+    background_color = RGBColorField(_('Background Color'), blank=True, null=True)
+    background_image = FilerImageField(verbose_name=_('Background Image'), blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    background_video_url = models.CharField(_('Background Video URL'), max_length=255, blank=True, null=True)
+    layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
+
+    def __str__(self):
+        return self.title or str(self.pk)
+
+    def get_id(self):
+        return slugify(self.title or 'section %s' % self.pk)
+
+
+@python_2_unicode_compatible
+class ShowcaseSlideshow(CMSPlugin):
+    title = models.CharField(_('Anchor title'), max_length=255, blank=True, null=True)
+    layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
+
+    def __str__(self):
+        return self.title or str(self.pk)
+
+    def get_id(self):
+        return slugify(self.title or 'slideshow %s' % self.pk)
+
+
+@python_2_unicode_compatible
+class ShowcaseSlide(CMSPlugin):
+    percentage = models.CharField(_('Percentage appears'), max_length=255, blank=True, null=True)
+    landscape_image = FilerImageField(verbose_name=_('Landscape Image'), blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    portrait_image = FilerImageField(verbose_name=_('Portrait Image'), blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    fade_in = models.BooleanField(_('Fade In'), default=False)
+    fade_out = models.BooleanField(_('Fade Out'), default=False)
+
+    def __str__(self):
+        return str(self.pk)
+
+    def get_id(self):
+        return slugify('slide %s' % self.pk)
+

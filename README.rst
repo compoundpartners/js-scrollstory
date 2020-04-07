@@ -1,4 +1,4 @@
-JS ScrollStory
+JS Showcase
 ====
 Addon description
 

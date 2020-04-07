@@ -1,0 +1,8 @@
+{% load cms_tags %}
+
+  <div {{ attributes_str }}>
+    {% for plugin in instance.child_plugin_instances %}
+        {% render_plugin plugin %}
+    {% endfor %}
+  </div>
+
