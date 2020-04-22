@@ -14,9 +14,12 @@ js_showcase.egg-info/not-zip-safe
 js_showcase.egg-info/top_level.txt
 js_showcase/migrations/0001_initial.py
 js_showcase/migrations/0002_showcasesection_background_video_url.py
+js_showcase/migrations/0003_auto_20200415_1031.py
+js_showcase/migrations/0004_showcasearticle.py
 js_showcase/migrations/__init__.py
 js_showcase/static/jquery.scrollstory.js
 js_showcase/static/jquery.scrollstory.min.js
+js_showcase/templates/js_showcase/article.html
 js_showcase/templates/js_showcase/container.html
 js_showcase/templates/js_showcase/section.html
 js_showcase/templates/js_showcase/section_left.html

@@ -10,10 +10,21 @@ from js_color_picker.fields import RGBColorField
 from filer.fields.image import FilerImageField
 from djangocms_text_ckeditor.fields import HTMLField
 
+from djangocms_attributes_field import fields
+
+class AttributesField(fields.AttributesField):
+    def __init__(self, *args, **kwargs):
+        if 'verbose_name' not in kwargs:
+            kwargs['verbose_name'] = _('Attributes')
+        if 'blank' not in kwargs:
+            kwargs['blank'] = True
+        super(AttributesField, self).__init__(*args, **kwargs)
+
 
 @python_2_unicode_compatible
 class ShowcaseContainer(CMSPlugin):
     title = models.CharField(_('title'), max_length=255, blank=True, null=True)
+    attributes = AttributesField()
 
     def __str__(self):
         return self.title or str(self.pk)
@@ -23,12 +34,26 @@ class ShowcaseContainer(CMSPlugin):
 
 
 @python_2_unicode_compatible
+class ShowcaseArticle(CMSPlugin):
+    title = models.CharField(_('title'), max_length=255)
+    layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
+    attributes = AttributesField()
+
+    def __str__(self):
+        return self.title
+
+    def get_id(self):
+        return slugify(self.title)
+
+
+@python_2_unicode_compatible
 class ShowcaseSection(CMSPlugin):
     title = models.CharField(_('Anchor title'), max_length=255, blank=True, null=True)
     background_color = RGBColorField(_('Background Color'), blank=True, null=True)
     background_image = FilerImageField(verbose_name=_('Background Image'), blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
     background_video_url = models.CharField(_('Background Video URL'), max_length=255, blank=True, null=True)
     layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
+    attributes = AttributesField()
 
     def __str__(self):
         return self.title or str(self.pk)
@@ -41,6 +66,7 @@ class ShowcaseSection(CMSPlugin):
 class ShowcaseSlideshow(CMSPlugin):
     title = models.CharField(_('Anchor title'), max_length=255, blank=True, null=True)
     layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
+    attributes = AttributesField()
 
     def __str__(self):
         return self.title or str(self.pk)
@@ -56,6 +82,7 @@ class ShowcaseSlide(CMSPlugin):
     portrait_image = FilerImageField(verbose_name=_('Portrait Image'), blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
     fade_in = models.BooleanField(_('Fade In'), default=False)
     fade_out = models.BooleanField(_('Fade Out'), default=False)
+    attributes = AttributesField()
 
     def __str__(self):
         return str(self.pk)

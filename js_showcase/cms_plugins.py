@@ -32,15 +32,40 @@ class ShowcaseContainerPlugin(CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/container.html'
     allow_children = True
-    child_classes = ['ShowcaseSectionPlugin']
+    child_classes = ['ShowcaseArticlePlugin']
+    exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
-        attributes = {}
+        attributes = instance.attributes
         attributes['id'] = instance.get_id()
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
+            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
+        })
+        return context
+
+
+@plugin_pool.register_plugin
+class ShowcaseArticlePlugin(LayoutMixin, CMSPluginBase):
+    TEMPLATE_NAME = 'js_showcase/article_%s.html'
+    module = 'JumpSuite Showcase'
+    model = models.ShowcaseArticle
+    name = _('Showcase Article')
+    admin_preview = False
+    render_template = 'js_showcase/article.html'
+    allow_children = True
+    parent_classes = ['ShowcaseContainerPlugin']
+    child_classes = ['ShowcaseSectionPlugin']
+    exclude = ['attributes', 'layout']
+
+    def render(self, context, instance, placeholder):
+        attributes = instance.attributes
+        attributes['id'] = instance.get_id()
+        context.update({
+            'instance': instance,
+            'placeholder': placeholder,
+            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
@@ -55,10 +80,11 @@ class ShowcaseSectionPlugin(LayoutMixin, CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/section.html'
     allow_children = True
-    parent_classes = ['ShowcaseContainerPlugin']
+    parent_classes = ['ShowcaseArticlePlugin']
+    exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
-        attributes = {}
+        attributes = instance.attributes
         attributes['id'] = instance.get_id()
         attributes['class'] = 'story' + ' story-%s' % (instance.layout if instance.layout else 'center')
         if instance.background_color or instance.background_image:
@@ -68,7 +94,7 @@ class ShowcaseSectionPlugin(LayoutMixin, CMSPluginBase):
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
+            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
@@ -85,6 +111,7 @@ class ShowcaseSlideshowPlugin(LayoutMixin, CMSPluginBase):
     allow_children = True
     child_classes = ['ShowcaseSlidePlugin']
     #parent_classes = ['ShowcaseSectionPlugin']
+    exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
         attributes = {}
@@ -92,7 +119,7 @@ class ShowcaseSlideshowPlugin(LayoutMixin, CMSPluginBase):
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
+            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
@@ -106,6 +133,7 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/slide.html'
     parent_classes = ['ShowcaseSlideShowPlugin']
+    exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
         attributes = {}
@@ -113,7 +141,7 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
+            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
