@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.template import TemplateDoesNotExist
+from django.template.loader import select_template
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 from . import models
 from . import forms
+from .constants import ADDITIONAL_CHILD_CLASSES, ADDITIONAL_PARENT_CLASSES
 
 
 class LayoutMixin():
@@ -32,7 +35,7 @@ class ShowcaseContainerPlugin(CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/container.html'
     allow_children = True
-    child_classes = ['ShowcaseArticlePlugin']
+    child_classes = ['ShowcaseArticlePlugin'] + ADDITIONAL_CHILD_CLASSES.get('ShowcaseContainerPlugin', [])
     exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
@@ -55,8 +58,8 @@ class ShowcaseArticlePlugin(LayoutMixin, CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/article.html'
     allow_children = True
-    parent_classes = ['ShowcaseContainerPlugin']
-    child_classes = ['ShowcaseSectionPlugin']
+    parent_classes = ['ShowcaseContainerPlugin'] + ADDITIONAL_PARENT_CLASSES.get('ShowcaseArticlePlugin', [])
+    child_classes = ['ShowcaseSectionPlugin'] + ADDITIONAL_CHILD_CLASSES.get('ShowcaseArticlePlugin', [])
     exclude = ['attributes', 'layout']
 
     def render(self, context, instance, placeholder):
@@ -80,7 +83,7 @@ class ShowcaseSectionPlugin(LayoutMixin, CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/section.html'
     allow_children = True
-    parent_classes = ['ShowcaseArticlePlugin']
+    parent_classes = ['ShowcaseArticlePlugin'] + ADDITIONAL_PARENT_CLASSES.get('ShowcaseSectionPlugin', [])
     exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
@@ -109,7 +112,7 @@ class ShowcaseSlideshowPlugin(LayoutMixin, CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/slideshow.html'
     allow_children = True
-    child_classes = ['ShowcaseSlidePlugin']
+    child_classes = ['ShowcaseSlidePlugin'] + ADDITIONAL_CHILD_CLASSES.get('ShowcaseSlideshowPlugin', [])
     #parent_classes = ['ShowcaseSectionPlugin']
     exclude = ['attributes']
 
@@ -132,7 +135,7 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     name = _('Showcase Slide')
     admin_preview = False
     render_template = 'js_showcase/slide.html'
-    parent_classes = ['ShowcaseSlideShowPlugin']
+    parent_classes = ['ShowcaseSlideShowPlugin'] + ADDITIONAL_PARENT_CLASSES.get('ShowcaseSlidePlugin', [])
     exclude = ['attributes']
 
     def render(self, context, instance, placeholder):

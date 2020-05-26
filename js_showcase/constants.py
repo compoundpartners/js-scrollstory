@@ -12,3 +12,13 @@ SLIDESHOW_LAYOUTS = getattr(
     'SHOWCASE_SLIDESHOW_LAYOUTS',
     (),
 )
+ADDITIONAL_CHILD_CLASSES = getattr(
+    settings,
+    'SHOWCASE_ADDITIONAL_CHILD_CLASSES',
+    {},
+)
+ADDITIONAL_PARENT_CLASSES = getattr(
+    settings,
+    'SHOWCASE_ADDITIONAL_PARENT_CLASSES',
+    {},
+)
