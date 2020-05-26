@@ -135,6 +135,7 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     name = _('Showcase Slide')
     admin_preview = False
     render_template = 'js_showcase/slide.html'
+    allow_children = True
     parent_classes = ['ShowcaseSlideShowPlugin'] + ADDITIONAL_PARENT_CLASSES.get('ShowcaseSlidePlugin', [])
     exclude = ['attributes']
 
