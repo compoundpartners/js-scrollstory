@@ -136,7 +136,7 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     admin_preview = False
     render_template = 'js_showcase/slide.html'
     allow_children = True
-    parent_classes = ['ShowcaseSlideShowPlugin'] + ADDITIONAL_PARENT_CLASSES.get('ShowcaseSlidePlugin', [])
+    #parent_classes = ['ShowcaseSlideShowPlugin'] + ADDITIONAL_PARENT_CLASSES.get('ShowcaseSlidePlugin', [])
     exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
@@ -152,5 +152,6 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     def get_layout(self, context, instance, placeholder):
         if instance.parent:
             plugin, _ = instance.parent.get_plugin_instance()
-            return plugin.layout
+            if hasattr(plugin, 'layout'):
+              return plugin.layout
         return ''

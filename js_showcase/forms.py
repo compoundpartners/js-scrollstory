@@ -8,7 +8,7 @@ from .constants import (
     SLIDESHOW_LAYOUTS,
 )
 
-SECTION_LAYOUTS_CHOICES = zip(list(map(lambda s: slugify(s).replace('-', '_'), ('', 'left', 'right') + SECTION_LAYOUTS)), ('center', 'left', 'right') + SECTION_LAYOUTS)
+SECTION_LAYOUTS_CHOICES = zip(list(map(lambda s: slugify(s).replace('-', '_'), ('',) + SECTION_LAYOUTS)), ('default',) + SECTION_LAYOUTS)
 
 SLIDESHOW_LAYOUTS_CHOICES = zip(list(map(lambda s: slugify(s).replace('-', '_'), ('',) + SLIDESHOW_LAYOUTS)), ('default',) + SLIDESHOW_LAYOUTS)
 

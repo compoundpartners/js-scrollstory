@@ -1,6 +1,7 @@
 LICENSE
 MANIFEST.in
 README.rst
+setup.cfg
 setup.py
 js_showcase/__init__.py
 js_showcase/cms_plugins.py
