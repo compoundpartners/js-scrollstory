@@ -17,6 +17,7 @@ js_showcase/migrations/0001_initial.py
 js_showcase/migrations/0002_showcasesection_background_video_url.py
 js_showcase/migrations/0003_auto_20200415_1031.py
 js_showcase/migrations/0004_showcasearticle.py
+js_showcase/migrations/0005_showcaseslide_layout.py
 js_showcase/migrations/__init__.py
 js_showcase/static/jquery.scrollstory.js
 js_showcase/static/jquery.scrollstory.min.js

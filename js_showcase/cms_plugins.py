@@ -7,7 +7,7 @@ from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 from . import models
 from . import forms
-from .constants import ADDITIONAL_CHILD_CLASSES, ADDITIONAL_PARENT_CLASSES
+from .constants import ADDITIONAL_CHILD_CLASSES, ADDITIONAL_PARENT_CLASSES, HIDE_ARTICLE
 
 
 class LayoutMixin():
@@ -49,7 +49,7 @@ class ShowcaseContainerPlugin(CMSPluginBase):
         return context
 
 
-@plugin_pool.register_plugin
+
 class ShowcaseArticlePlugin(LayoutMixin, CMSPluginBase):
     TEMPLATE_NAME = 'js_showcase/article_%s.html'
     module = 'JumpSuite Showcase'
@@ -71,6 +71,9 @@ class ShowcaseArticlePlugin(LayoutMixin, CMSPluginBase):
             #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
+
+if not HIDE_ARTICLE:
+    plugin_pool.register_plugin(ShowcaseArticlePlugin)
 
 
 @plugin_pool.register_plugin

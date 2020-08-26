@@ -27,3 +27,8 @@ ADDITIONAL_PARENT_CLASSES = getattr(
     'SHOWCASE_ADDITIONAL_PARENT_CLASSES',
     {},
 )
+HIDE_ARTICLE = getattr(
+    settings,
+    'SHOWCASE_HIDE_ARTICLE',
+    False,
+)

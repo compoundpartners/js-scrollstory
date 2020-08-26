@@ -2,13 +2,16 @@ from aldryn_client import forms
 
 class Form(forms.BaseForm):
     section_layouts = forms.CharField(
-        'Section layouts', required=False, initial=False
+        'Section layouts', required=False
     )
     slideshow_layouts = forms.CharField(
-        'Slideshow layouts', required=False, initial=False
+        'Slideshow layouts', required=False
     )
     slide_layouts = forms.CharField(
-        'Slide layouts', required=False, initial=False
+        'Slide layouts', required=False
+    )
+    hide_article = forms.CheckboxField(
+        'Hide Showcase Article', required=False, initial=False
     )
 
     def to_settings(self, data, settings):
@@ -18,4 +21,6 @@ class Form(forms.BaseForm):
             settings['SHOWCASE_SLIDESHOW_LAYOUTS'] = tuple(l.strip() for l in data['slideshow_layouts'].split(','))
         if data['slide_layouts']:
             settings['SHOWCASE_SLIDE_LAYOUTS'] = tuple(l.strip() for l in data['slide_layouts'].split(','))
+        if data['hide_article']:
+            settings['SHOWCASE_HIDE_ARTICLE'] = int(data['hide_article'])
         return settings
