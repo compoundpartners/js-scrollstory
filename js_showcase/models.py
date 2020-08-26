@@ -82,6 +82,7 @@ class ShowcaseSlide(CMSPlugin):
     portrait_image = FilerImageField(verbose_name=_('Portrait Image'), blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
     fade_in = models.BooleanField(_('Fade In'), default=False)
     fade_out = models.BooleanField(_('Fade Out'), default=False)
+    layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
     attributes = AttributesField()
 
     def __str__(self):

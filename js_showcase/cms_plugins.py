@@ -132,6 +132,7 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     TEMPLATE_NAME = 'js_showcase/slide_%s.html'
     module = 'JumpSuite Showcase'
     model = models.ShowcaseSlide
+    form = forms.ShowcaseSlideForm
     name = _('Showcase Slide')
     admin_preview = False
     render_template = 'js_showcase/slide.html'
@@ -149,9 +150,9 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
         })
         return context
 
-    def get_layout(self, context, instance, placeholder):
-        if instance.parent:
-            plugin, _ = instance.parent.get_plugin_instance()
-            if hasattr(plugin, 'layout'):
-              return plugin.layout
-        return ''
+    # def get_layout(self, context, instance, placeholder):
+        # if instance.parent:
+            # plugin, _ = instance.parent.get_plugin_instance()
+            # if hasattr(plugin, 'layout'):
+              # return plugin.layout
+        # return ''
