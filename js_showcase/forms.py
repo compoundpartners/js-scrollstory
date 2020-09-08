@@ -2,11 +2,13 @@
 from __future__ import unicode_literals
 from django import forms
 from django.utils.text import slugify
+from djangocms_attributes_field.fields import AttributesFormField
 from . import models
 from .constants import (
     SECTION_LAYOUTS,
     SLIDESHOW_LAYOUTS,
     SLIDE_LAYOUTS,
+    DEVICE_SIZES,
 )
 
 SECTION_LAYOUTS_CHOICES = zip(list(map(lambda s: slugify(s).replace('-', '_'), ('',) + SECTION_LAYOUTS)), ('default',) + SECTION_LAYOUTS)
@@ -24,7 +26,7 @@ class ShowcaseSectionForm(forms.ModelForm):
         fields = '__all__'
 
 
-class ShowcaseSlideshowForm(forms.ModelForm):
+class ShowcaseSlideshowBaseForm(forms.ModelForm):
 
     layout = forms.ChoiceField(choices=SLIDESHOW_LAYOUTS_CHOICES, required=False)
 
@@ -38,5 +40,18 @@ class ShowcaseSlideForm(forms.ModelForm):
     layout = forms.ChoiceField(choices=SLIDE_LAYOUTS_CHOICES, required=False)
 
     class Meta:
-        model = models.ShowcaseSlideshow
+        model = models.ShowcaseSlide
         fields = '__all__'
+
+extra_fields_column = {}
+for size in DEVICE_SIZES:
+    extra_fields_column['{}_hide'.format(size)] = forms.BooleanField(
+        label='hide {}'.format(size),
+        required=False,
+    )
+
+ShowcaseSlideshowForm = type(
+    str('Bootstrap4GridColumnBaseForm'),
+    (ShowcaseSlideshowBaseForm,),
+    extra_fields_column,
+)

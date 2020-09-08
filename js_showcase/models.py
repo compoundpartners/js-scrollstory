@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from functools import partial
+
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext as _
@@ -9,8 +11,10 @@ from cms.models.pluginmodel import CMSPlugin
 from js_color_picker.fields import RGBColorField
 from filer.fields.image import FilerImageField
 from djangocms_text_ckeditor.fields import HTMLField
-
 from djangocms_attributes_field import fields
+
+from .constants import DEVICE_SIZES
+
 
 class AttributesField(fields.AttributesField):
     def __init__(self, *args, **kwargs):
@@ -91,3 +95,14 @@ class ShowcaseSlide(CMSPlugin):
     def get_id(self):
         return slugify('slide %s' % self.pk)
 
+
+BooleanFieldPartial = partial(
+    models.BooleanField,
+    default=False,
+)
+
+for size in DEVICE_SIZES:
+    ShowcaseSlideshow.add_to_class(
+        '{}_hide'.format(size),
+        BooleanFieldPartial(),
+    )

@@ -7,7 +7,13 @@ from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 from . import models
 from . import forms
-from .constants import ADDITIONAL_CHILD_CLASSES, ADDITIONAL_PARENT_CLASSES, HIDE_ARTICLE
+from .constants import (
+    ADDITIONAL_CHILD_CLASSES,
+    ADDITIONAL_PARENT_CLASSES,
+    HIDE_ARTICLE,
+    HIDE_SLIDE,
+    DEVICE_SIZES,
+)
 
 
 class LayoutMixin():
@@ -100,12 +106,10 @@ class ShowcaseSectionPlugin(LayoutMixin, CMSPluginBase):
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
 
-@plugin_pool.register_plugin
 class ShowcaseSlideshowPlugin(LayoutMixin, CMSPluginBase):
     TEMPLATE_NAME = 'js_showcase/slideshow_%s.html'
     module = 'JumpSuite Showcase'
@@ -114,23 +118,54 @@ class ShowcaseSlideshowPlugin(LayoutMixin, CMSPluginBase):
     name = _('Showcase Slideshow')
     admin_preview = False
     render_template = 'js_showcase/slideshow.html'
+    change_form_template = 'js_showcase/admin/slideshow.html'
     allow_children = True
     child_classes = ['ShowcaseSlidePlugin'] + ADDITIONAL_CHILD_CLASSES.get('ShowcaseSlideshowPlugin', [])
     #parent_classes = ['ShowcaseSectionPlugin']
-    exclude = ['attributes']
 
+    fieldsets = [
+        (None, {
+            'fields': (
+                'title',
+                'layout',
+            )
+        }),
+        (_('Responsive settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                ['{}_hide'.format(size) for size in DEVICE_SIZES],
+            )
+        }),
+        (_('Advanced settings'), {
+            'classes': ('collapse',),
+            'fields': ['attributes']
+        }),
+    ]
     def render(self, context, instance, placeholder):
-        attributes = {}
-        attributes['id'] = instance.get_id()
+        classes = []
+        hide = None
+        show = None
+        for device in DEVICE_SIZES:
+            value = getattr(instance, '{}_hide'.format(device))
+            if value:
+                hide = device
+            elif hide:
+                classes.append('{}-{}-{}'.format('d', hide, 'hide'))
+                classes.append('{}-{}-{}'.format('d', device, 'block'))
+                hide = None
+                show = device
+        if hide == 'xl':
+            classes.append('{}-{}-{}'.format('d', hide, 'hide'))
+        if show is None:
+            classes.append('{}-{}'.format('d', 'block'))
+        instance.attributes['class'] = ' '.join(classes)
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
 
-@plugin_pool.register_plugin
 class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     TEMPLATE_NAME = 'js_showcase/slide_%s.html'
     module = 'JumpSuite Showcase'
@@ -144,12 +179,9 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
     exclude = ['attributes']
 
     def render(self, context, instance, placeholder):
-        attributes = {}
-        attributes['id'] = instance.get_id()
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
@@ -159,3 +191,7 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
             # if hasattr(plugin, 'layout'):
               # return plugin.layout
         # return ''
+
+if not HIDE_SLIDE:
+    plugin_pool.register_plugin(ShowcaseSlideshowPlugin)
+    plugin_pool.register_plugin(ShowcaseSlidePlugin)

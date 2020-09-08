@@ -13,6 +13,9 @@ class Form(forms.BaseForm):
     hide_article = forms.CheckboxField(
         'Hide Showcase Article', required=False, initial=False
     )
+    hide_slide = forms.CheckboxField(
+        'Hide Showcase Slide', required=False, initial=False
+    )
 
     def to_settings(self, data, settings):
         if data['section_layouts']:
@@ -23,4 +26,6 @@ class Form(forms.BaseForm):
             settings['SHOWCASE_SLIDE_LAYOUTS'] = tuple(l.strip() for l in data['slide_layouts'].split(','))
         if data['hide_article']:
             settings['SHOWCASE_HIDE_ARTICLE'] = int(data['hide_article'])
+        if data['hide_slide']:
+            settings['SHOWCASE_HIDE_SLIDE'] = int(data['hide_slide'])
         return settings
