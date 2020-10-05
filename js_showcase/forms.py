@@ -17,7 +17,7 @@ SLIDESHOW_LAYOUTS_CHOICES = zip(list(map(lambda s: slugify(s).replace('-', '_'),
 
 SLIDE_LAYOUTS_CHOICES = zip(list(map(lambda s: slugify(s).replace('-', '_'), ('',) + SLIDE_LAYOUTS)), ('default',) + SLIDE_LAYOUTS)
 
-class ShowcaseSectionForm(forms.ModelForm):
+class ShowcaseSectionBaseForm(forms.ModelForm):
 
     layout = forms.ChoiceField(choices=SECTION_LAYOUTS_CHOICES, required=False)
 
@@ -53,5 +53,10 @@ for size in DEVICE_SIZES:
 ShowcaseSlideshowForm = type(
     str('Bootstrap4GridColumnBaseForm'),
     (ShowcaseSlideshowBaseForm,),
+    extra_fields_column,
+)
+ShowcaseSectionForm = type(
+    str('Bootstrap4GridColumnBaseForm'),
+    (ShowcaseSectionBaseForm,),
     extra_fields_column,
 )

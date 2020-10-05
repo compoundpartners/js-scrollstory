@@ -91,14 +91,56 @@ class ShowcaseSectionPlugin(LayoutMixin, CMSPluginBase):
     name = _('Showcase Section')
     admin_preview = False
     render_template = 'js_showcase/section.html'
+    change_form_template = 'js_showcase/admin/section.html'
     allow_children = True
     parent_classes = ['ShowcaseArticlePlugin'] + ADDITIONAL_PARENT_CLASSES.get('ShowcaseSectionPlugin', [])
-    exclude = ['attributes']
+
+    fieldsets = [
+        (None, {
+            'fields': (
+                'title',
+                'layout',
+                'background_color',
+                'background_image',
+                'background_video_url',
+            )
+        }),
+        (_('Responsive settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                ['{}_hide'.format(size) for size in DEVICE_SIZES],
+            )
+        }),
+        (_('Advanced settings'), {
+            'classes': ('collapse',),
+            'fields': ['attributes']
+        }),
+    ]
 
     def render(self, context, instance, placeholder):
         attributes = instance.attributes
+        classes = []
+        hide = []
+        show = None
+        for device in DEVICE_SIZES:
+            value = getattr(instance, '{}_hide'.format(device))
+            if value:
+                hide.append(device)
+            elif hide:
+                if 'xs' in hide:
+                  classes.append('{}-{}'.format('d', 'none'))
+                else:
+                  classes.append('{}-{}-{}'.format('d', hide[-1], 'none'))
+                classes.append('{}-{}-{}'.format('d', device, 'block'))
+                show = device
+                hide = []
+        if len(hide) == len(DEVICE_SIZES):
+            classes.append('{}-{}'.format('d', 'none'))
+        elif 'xl' in hide:
+            classes.append('d-xl-none')
+        classes.append('story' + ' story-%s' % (instance.layout if instance.layout else 'center'))
+        attributes['class'] = ' '.join(classes)
         attributes['id'] = instance.get_id()
-        attributes['class'] = 'story' + ' story-%s' % (instance.layout if instance.layout else 'center')
         if instance.background_color or instance.background_image:
             color_str = ' %s' % instance.background_color if instance.background_color else ''
             img_str = ' url(%s)' % instance.background_image.url if instance.background_image else ''
@@ -143,21 +185,24 @@ class ShowcaseSlideshowPlugin(LayoutMixin, CMSPluginBase):
     ]
     def render(self, context, instance, placeholder):
         classes = []
-        hide = None
+        hide = []
         show = None
         for device in DEVICE_SIZES:
             value = getattr(instance, '{}_hide'.format(device))
             if value:
-                hide = device
+                hide.append(device)
             elif hide:
-                classes.append('{}-{}-{}'.format('d', hide, 'hide'))
+                if 'xs' in hide:
+                  classes.append('{}-{}'.format('d', 'none'))
+                else:
+                  classes.append('{}-{}-{}'.format('d', hide[-1], 'none'))
                 classes.append('{}-{}-{}'.format('d', device, 'block'))
-                hide = None
                 show = device
-        if hide == 'xl':
-            classes.append('{}-{}-{}'.format('d', hide, 'hide'))
-        if show is None:
-            classes.append('{}-{}'.format('d', 'block'))
+                hide = []
+        if len(hide) == len(DEVICE_SIZES):
+            classes.append('{}-{}'.format('d', 'none'))
+        elif 'xl' in hide:
+            classes.append('d-xl-none')
         instance.attributes['class'] = ' '.join(classes)
         context.update({
             'instance': instance,
