@@ -120,24 +120,16 @@ class ShowcaseSectionPlugin(LayoutMixin, CMSPluginBase):
     def render(self, context, instance, placeholder):
         attributes = instance.attributes
         classes = []
-        hide = []
-        show = None
         for device in DEVICE_SIZES:
-            value = getattr(instance, '{}_hide'.format(device))
-            if value:
-                hide.append(device)
-            elif hide:
-                if 'xs' in hide:
-                  classes.append('{}-{}'.format('d', 'none'))
-                else:
-                  classes.append('{}-{}-{}'.format('d', hide[-1], 'none'))
-                classes.append('{}-{}-{}'.format('d', device, 'block'))
-                show = device
-                hide = []
-        if len(hide) == len(DEVICE_SIZES):
-            classes.append('{}-{}'.format('d', 'none'))
-        elif 'xl' in hide:
-            classes.append('d-xl-none')
+            hide = getattr(instance, '{}_hide'.format(device))
+            value = 'none' if hide else 'block'
+            if device == 'xs':
+                classes.append('d-%s' % value)
+                prev = hide
+            else:
+                if hide != prev:
+                    classes.append('d-%s-%s' % (device, value))
+                    prev = hide
         classes.append('story' + ' story-%s' % (instance.layout if instance.layout else 'center'))
         attributes['class'] = ' '.join(classes)
         attributes['id'] = instance.get_id()
@@ -185,24 +177,16 @@ class ShowcaseSlideshowPlugin(LayoutMixin, CMSPluginBase):
     ]
     def render(self, context, instance, placeholder):
         classes = []
-        hide = []
-        show = None
         for device in DEVICE_SIZES:
-            value = getattr(instance, '{}_hide'.format(device))
-            if value:
-                hide.append(device)
-            elif hide:
-                if 'xs' in hide:
-                  classes.append('{}-{}'.format('d', 'none'))
-                else:
-                  classes.append('{}-{}-{}'.format('d', hide[-1], 'none'))
-                classes.append('{}-{}-{}'.format('d', device, 'block'))
-                show = device
-                hide = []
-        if len(hide) == len(DEVICE_SIZES):
-            classes.append('{}-{}'.format('d', 'none'))
-        elif 'xl' in hide:
-            classes.append('d-xl-none')
+            hide = getattr(instance, '{}_hide'.format(device))
+            value = 'none' if hide else 'block'
+            if device == 'xs':
+                classes.append('d-%s' % value)
+                prev = hide
+            else:
+                if hide != prev:
+                    classes.append('d-%s-%s' % (device, value))
+                    prev = hide
         instance.attributes['class'] = ' '.join(classes)
         context.update({
             'instance': instance,
