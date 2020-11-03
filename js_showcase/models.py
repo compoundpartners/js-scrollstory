@@ -28,6 +28,7 @@ class AttributesField(fields.AttributesField):
 @python_2_unicode_compatible
 class ShowcaseContainer(CMSPlugin):
     title = models.CharField(_('title'), max_length=255, blank=True, null=True)
+    layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
     attributes = AttributesField()
 
     def __str__(self):

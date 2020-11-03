@@ -34,11 +34,13 @@ class LayoutMixin():
 
 
 @plugin_pool.register_plugin
-class ShowcaseContainerPlugin(CMSPluginBase):
+class ShowcaseContainerPlugin(LayoutMixin, CMSPluginBase):
     module = 'JumpSuite Showcase'
     model = models.ShowcaseContainer
+    form = forms.ShowcaseContainerForm
     name = _('Showcase Container')
     admin_preview = False
+    TEMPLATE_NAME = 'js_showcase/container_%s.html'
     render_template = 'js_showcase/container.html'
     allow_children = True
     child_classes = ['ShowcaseArticlePlugin'] + ADDITIONAL_CHILD_CLASSES.get('ShowcaseContainerPlugin', [])
@@ -50,10 +52,8 @@ class ShowcaseContainerPlugin(CMSPluginBase):
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
-
 
 
 class ShowcaseArticlePlugin(LayoutMixin, CMSPluginBase):
@@ -74,7 +74,6 @@ class ShowcaseArticlePlugin(LayoutMixin, CMSPluginBase):
         context.update({
             'instance': instance,
             'placeholder': placeholder,
-            #'attributes_str': mark_safe(' '.join(['%s="%s"' % a for a in attributes.items()]))
         })
         return context
 
@@ -213,13 +212,6 @@ class ShowcaseSlidePlugin(LayoutMixin, CMSPluginBase):
             'placeholder': placeholder,
         })
         return context
-
-    # def get_layout(self, context, instance, placeholder):
-        # if instance.parent:
-            # plugin, _ = instance.parent.get_plugin_instance()
-            # if hasattr(plugin, 'layout'):
-              # return plugin.layout
-        # return ''
 
 if not HIDE_SLIDE:
     plugin_pool.register_plugin(ShowcaseSlideshowPlugin)

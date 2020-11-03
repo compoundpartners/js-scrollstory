@@ -2,6 +2,11 @@
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
+CONTAINER_LAYOUTS = getattr(
+    settings,
+    'SHOWCASE_CONTAINER_LAYOUTS',
+    (),
+)
 SECTION_LAYOUTS = getattr(
     settings,
     'SHOWCASE_SECTION_LAYOUTS',

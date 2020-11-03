@@ -20,6 +20,7 @@ js_showcase/migrations/0004_showcasearticle.py
 js_showcase/migrations/0005_showcaseslide_layout.py
 js_showcase/migrations/0006_auto_20200908_1351.py
 js_showcase/migrations/0007_auto_20201005_1122.py
+js_showcase/migrations/0008_auto_20201016_0809.py
 js_showcase/migrations/__init__.py
 js_showcase/static/jquery.scrollstory.js
 js_showcase/static/jquery.scrollstory.min.js
