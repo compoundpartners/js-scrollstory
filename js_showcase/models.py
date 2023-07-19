@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from functools import partial
 
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext as _
 from django.utils.text import slugify
 from cms.models.pluginmodel import CMSPlugin
@@ -25,7 +24,6 @@ class AttributesField(fields.AttributesField):
         super(AttributesField, self).__init__(*args, **kwargs)
 
 
-@python_2_unicode_compatible
 class ShowcaseContainer(CMSPlugin):
     title = models.CharField(_('title'), max_length=255, blank=True, null=True)
     layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
@@ -38,7 +36,6 @@ class ShowcaseContainer(CMSPlugin):
         return slugify(self.title or 'show case %s' % self.pk)
 
 
-@python_2_unicode_compatible
 class ShowcaseArticle(CMSPlugin):
     title = models.CharField(_('title'), max_length=255)
     layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
@@ -51,7 +48,6 @@ class ShowcaseArticle(CMSPlugin):
         return slugify(self.title)
 
 
-@python_2_unicode_compatible
 class ShowcaseSection(CMSPlugin):
     title = models.CharField(_('Anchor title'), max_length=255, blank=True, null=True)
     background_color = RGBColorField(_('Background Color'), blank=True, null=True)
@@ -67,7 +63,6 @@ class ShowcaseSection(CMSPlugin):
         return slugify(self.title or 'section %s' % self.pk)
 
 
-@python_2_unicode_compatible
 class ShowcaseSlideshow(CMSPlugin):
     title = models.CharField(_('Anchor title'), max_length=255, blank=True, null=True)
     layout = models.CharField(_('layout'), max_length=60, default='', blank=True)
@@ -80,7 +75,6 @@ class ShowcaseSlideshow(CMSPlugin):
         return slugify(self.title or 'slideshow %s' % self.pk)
 
 
-@python_2_unicode_compatible
 class ShowcaseSlide(CMSPlugin):
     percentage = models.CharField(_('Percentage appears'), max_length=255, blank=True, null=True)
     landscape_image = FilerImageField(verbose_name=_('Landscape Image'), blank=True, null=True, on_delete=models.SET_NULL, related_name='+')

@@ -1,15 +1,13 @@
-Metadata-Version: 1.0
+Metadata-Version: 2.1
 Name: js-showcase
-Version: 0.0.26
-Summary: JS Showcase
-====
-Addon description
-
-
-
+Version: 0.0.27
+Summary: JS Showcase ==== Addon description   
 Home-page: UNKNOWN
 Author: Compound Partners Ltd
 Author-email: hello@compoundpartners.co.uk
 License: UNKNOWN
-Description: UNKNOWN
 Platform: OS Independent
+License-File: LICENSE
+
+UNKNOWN
+
